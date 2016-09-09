@@ -23,7 +23,7 @@ var comoonMethods = {
     }
 };
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public/app'));
 
 var numUsers = 0;
 
@@ -36,8 +36,40 @@ var users = [];
 io.on('connection', function (socket) {
     var addedUser = false;
 
+    var chatMethods = {
+        getCommand: function (command) {
+            var commandSplit = command.split(' ');
+
+            switch (commandSplit[0]) {
+                case '/name':
+                    chatMethods.setName(commandSplit[1]);
+                break;
+
+                case '/help':
+                    chatMethods.showHelp();
+                    break;
+
+            }
+        },
+        setName: function (username) {
+            socket.username = username;
+        },
+        showHelp: function () {
+            socket.broadcast.emit('new message', {
+                username: 'help',
+                message: '/name aby zmienic nazwe uzytkownika'
+            });
+        }
+    };
+
     socket.on('new message', function (data) {
         // we tell the client to execute 'new message'
+
+        if(data[0] === '/') {
+            chatMethods.getCommand(data);
+            return;
+        }
+
         socket.broadcast.emit('new message', {
             username: socket.username,
             message: data
