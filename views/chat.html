@@ -31,6 +31,9 @@
     socket.on('chat message', function(msg){
         $('#messages').append($('<li>').text(msg));
     });
+    socket.on('user connected', function(msg){
+        $('#messages').append($('<li>').text('połączył się chujek xD'));
+    });
 </script>
 
 </body>
