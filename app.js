@@ -22,9 +22,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', function(req, res){
+app.use('/', routes);
+app.use('/users', users);
+
+/*app.get('/', function(req, res){
     res.send('hello world');
-});
+});*/
 
 app.listen(3000);
 //server.listen(3000);
