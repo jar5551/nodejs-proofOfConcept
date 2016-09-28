@@ -10,6 +10,7 @@
 angular.module('publicApp')
     .factory('socket', function ($rootScope) {
         var socket = io.connect();
+
         return {
             on: function (eventName, callback) {
                 socket.on(eventName, function () {
@@ -21,6 +22,8 @@ angular.module('publicApp')
             },
             emit: function (eventName, data, callback) {
                 socket.emit(eventName, data, function () {
+                    console.log('emit', data);
+
                     var args = arguments;
                     $rootScope.$apply(function () {
                         if (callback) {

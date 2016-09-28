@@ -10,6 +10,7 @@
 angular.module('publicApp')
     .controller('MainCtrl', function ($scope, $log, socket) {
         $scope.message = '';
+        $scope.messages = [];
         var FADE_TIME = 150; // ms
         var TYPING_TIMER_LENGTH = 400; // ms
         var COLORS = [
@@ -24,8 +25,35 @@ angular.module('publicApp')
         var typing = false;
         var lastTypingTime;
 
+        function addChatMessage (data, options) {
+            $scope.messages.push(data);
+        }
+
+        function sendMessage () {
+            socket.emit('send:message', {
+                message: $scope.message
+            });
+
+            // add the message to our model locally
+            $scope.messages.push($scope.message);
+
+            // clear message box
+            $scope.message = '';
+        }
+
+        socket.emit('send:message', 'as', function () {
+            console.log('emit', data);
+
+            var args = arguments;
+            $rootScope.$apply(function () {
+                if (callback) {
+                    callback.apply(socket, args);
+                }
+            });
+        });
+
         $scope.submitMessage = function (message) {
-            $log.log(message);
+            sendMessage(message);
             $scope.message = '';
         };
 

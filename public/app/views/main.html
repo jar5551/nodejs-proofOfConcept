@@ -1,11 +1,16 @@
-<div class="row marketing">
+<div class="row marketing" ng-controller="MainCtrl">
   <ul class="pages">
     <li class="chat page">
       <div class="chatArea">
-        <ul class="messages"></ul>
+        <ul class="messages">
+          <li ng-repeat="message in messages track by $index">
+            {{message}}
+          </li>
+        </ul>
       </div>
-      <form ng-submit="submitMessage(message)">
+      <form ng-submit="submitMessage()">
         <input type="text" class="inputMessage" placeholder="Type here..." ng-model="message"/>
+        <button type="submit">Wyślij</button>
       </form>
     </li>
   </ul>
