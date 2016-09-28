@@ -55,6 +55,8 @@ angular.module('publicApp')
         $scope.submitMessage = function (message) {
             sendMessage(message);
             $scope.message = '';
+
+            socket.emit('chat message', 'aa');
         };
 
         /*socket.on('login', function (data) {
